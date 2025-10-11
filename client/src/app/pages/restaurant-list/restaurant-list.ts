@@ -147,9 +147,9 @@ export class RestaurantListComponent implements OnInit, AfterViewInit {
         if (restaurant.location && restaurant.location.coordinates && restaurant.location.coordinates.length === 2) {
           const restaurantLat = restaurant.location.coordinates[1];
           const restaurantLng = restaurant.location.coordinates[0];
-          
+
           const distance = this.calculateDistance(this.lat, this.lng, restaurantLat, restaurantLng);
-          
+
           console.log(`Restaurant: ${restaurant.name}, Coords: [${restaurantLng}, ${restaurantLat}], Distance: ${Math.round(distance)}m`);
 
           if (distance <= this.radius) {
@@ -177,7 +177,7 @@ export class RestaurantListComponent implements OnInit, AfterViewInit {
       setTimeout(() => {
         this.mapComponent.fitToMarkers();
       }, 200);
-      
+
     } else {
       console.log('Map component not ready, retrying in 1 second...');
       setTimeout(() => this.updateMap(), 1000);

@@ -4,10 +4,10 @@ import { catchError, switchMap, takeUntil, map } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CartService, CartItem } from '../../services/cart';
-import { CartComponent } from '../../components/cart/cart';
 import { RestaurantService } from '../../services/restaurant';
 import { Restaurant, MenuItem } from '../../models/Restaurant';
 import { MapComponent } from '../../components/map/map';
+import { CartComponent } from '../../components/cart/cart';
 
 @Component({
   selector: 'app-restaurant-detail',
@@ -74,6 +74,7 @@ export class RestaurantDetailComponent implements OnInit, OnDestroy, AfterViewIn
 
   addToCart(item: MenuItem) {
     this.cartService.addToCart(item, this.restaurant);
+    alert(`${item.name} added to cart!`);
   }
 
   isInCart(item: MenuItem): Observable<boolean> {
