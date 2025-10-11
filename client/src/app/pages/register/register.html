@@ -9,6 +9,10 @@
     </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <!--
+        NOTE: You will need to add a `currentStep` property (e.g., `currentStep = 1;`)
+        to your register.component.ts file to manage the steps.
+      -->
       <!-- Error Message -->
       <div *ngIf="errorMessage" class="alert alert-error animate-scale-in">
         <div class="alert-icon">⚠️</div>
@@ -73,6 +77,29 @@
         </div>
       </div>
 
+      <!-- Phone Number Field -->
+      <div class="form-group">
+        <label for="phone" class="form-label">
+          <span class="label-icon">📞</span>
+          Phone Number
+        </label>
+        <div class="input-container">
+          <input
+            type="tel"
+            id="phone"
+            formControlName="phone"
+            class="form-control glass"
+            [class.error]="getFieldError('phone')"
+            placeholder="Enter your phone number"
+            autocomplete="tel"
+          />
+          <div class="input-icon">📱</div>
+        </div>
+        <div *ngIf="getFieldError('phone')" class="error-message animate-scale-in">
+          {{ getFieldError('phone') }}
+        </div>
+      </div>
+
       <!-- Password Field -->
       <div class="form-group">
         <label for="password" class="form-label">
@@ -120,41 +147,21 @@
       </div>
 
       <!-- Terms and Conditions -->
-      <div class="form-options">
+      <div class="form-group">
         <label class="checkbox-container">
-          <input type="checkbox" class="checkbox-input" required>
+          <input type="checkbox" formControlName="terms" class="checkbox-input">
           <span class="checkbox-custom"></span>
           <span class="checkbox-label">I agree to the <a href="#" class="terms-link">Terms & Conditions</a></span>
         </label>
       </div>
 
       <!-- Submit Button -->
-      <button
-        type="submit"
-        class="btn btn-primary w-full"
-        [disabled]="isLoading"
-      >
+      <button type="submit" class="btn btn-primary w-full" [disabled]="isLoading">
         <span *ngIf="isLoading" class="loading-spinner"></span>
         <span *ngIf="!isLoading" class="btn-icon">🚀</span>
         {{ isLoading ? 'Creating Account...' : 'Create Account' }}
       </button>
 
-      <!-- Divider -->
-      <div class="divider">
-        <span class="divider-text">or</span>
-      </div>
-
-      <!-- Social Registration Buttons -->
-      <div class="social-login">
-        <button type="button" class="btn btn-social btn-google">
-          <span class="social-icon">🔍</span>
-          Sign up with Google
-        </button>
-        <button type="button" class="btn btn-social btn-facebook">
-          <span class="social-icon">📘</span>
-          Sign up with Facebook
-        </button>
-      </div>
     </form>
 
     <div class="auth-footer">
@@ -162,15 +169,5 @@
         <a routerLink="/login" class="auth-link">Sign in here</a>
       </p>
     </div>
-  </div>
-
-  <!-- Floating Elements -->
-  <div class="floating-elements">
-    <div class="floating-icon animate-float" style="top: 15%; left: 8%;">🍕</div>
-    <div class="floating-icon animate-float-reverse" style="top: 25%; right: 12%;">🍔</div>
-    <div class="floating-icon animate-float" style="top: 55%; left: 3%;">🍜</div>
-    <div class="floating-icon animate-float-reverse" style="top: 65%; right: 8%;">🍰</div>
-    <div class="floating-icon animate-float" style="top: 35%; right: 3%;">🥗</div>
-    <div class="floating-icon animate-float-reverse" style="top: 75%; left: 10%;">🍣</div>
   </div>
 </div>

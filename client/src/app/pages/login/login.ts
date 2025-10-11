@@ -9,23 +9,19 @@ import { AuthService } from '../../services/auth';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrl: './login.css',
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading = false;
   errorMessage = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -43,7 +39,7 @@ export class LoginComponent implements OnInit {
         error: (error) => {
           this.isLoading = false;
           this.errorMessage = error.error?.msg || 'Login failed. Please try again.';
-        }
+        },
       });
     } else {
       this.markFormGroupTouched();
@@ -51,7 +47,7 @@ export class LoginComponent implements OnInit {
   }
 
   private markFormGroupTouched(): void {
-    Object.keys(this.loginForm.controls).forEach(key => {
+    Object.keys(this.loginForm.controls).forEach((key) => {
       const control = this.loginForm.get(key);
       control?.markAsTouched();
     });
@@ -62,7 +58,8 @@ export class LoginComponent implements OnInit {
     if (field?.errors && field.touched) {
       if (field.errors['required']) return `${fieldName} is required`;
       if (field.errors['email']) return 'Please enter a valid email';
-      if (field.errors['minlength']) return 'Password must be at least 6 characters';
+      if (field.errors['minlength'])
+        return `Password must be at least ${field.errors['minlength'].requiredLength} characters`;
     }
     return '';
   }

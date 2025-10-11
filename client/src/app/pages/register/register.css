@@ -1,4 +1,193 @@
-/* Enhanced Register Styles - Inherits from login.css */
+/*
+  Enhanced Register Styles
+  Inherits from global styles and login.css for consistency
+*/
+
+/* The main container is already styled globally by styles.css */
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card styles are similar to login but with minor adjustments */
+.auth-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 480px; /* Slightly wider for more fields */
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+.auth-header {
+  text-align: center;
+  padding: 2.5rem 2rem 1.5rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient-text {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(to right, var(--primary-color, #ff6b35), var(--primary-hover, #f7931e));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.logo-icon {
+  font-size: 2.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.auth-header p {
+  opacity: 0.9;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  font-weight: 300;
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.auth-form {
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  margin-bottom: 0; /* Use gap from auth-form instead */
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.label-icon {
+  font-size: 1rem;
+  opacity: 0.7;
+}
+
+.input-container {
+  position: relative;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 3rem;
+  border: 2px solid rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #333;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.form-control::placeholder {
+  color: rgba(51, 51, 51, 0.6);
+  font-weight: 400;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: rgba(102, 126, 234, 0.6);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.form-control.error {
+  border-color: rgba(220, 53, 69, 0.6);
+  box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.1);
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  color: rgba(102, 126, 234, 0.7);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #181818;
+}
+
+.checkbox-input {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(102, 126, 234, 0.5);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.checkbox-input:checked + .checkbox-custom {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+}
+
+.checkbox-input:checked + .checkbox-custom::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
 .terms-link {
   color: #667eea;
   text-decoration: none;
@@ -43,4 +232,23 @@
   color: #28a745;
 }
 
+.auth-footer {
+  padding: 1.5rem 2rem 2rem;
+  text-align: center;
+  background: rgba(248, 249, 250, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
 
+.auth-footer p {
+  color: #444;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.auth-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+}
