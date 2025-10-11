@@ -1,0 +1,46 @@
+/* Enhanced Register Styles - Inherits from login.css */
+.terms-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.terms-link::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.3s ease;
+}
+
+.terms-link:hover::after {
+  width: 100%;
+}
+
+.terms-link:hover {
+  color: #764ba2;
+}
+
+/* Additional register-specific styles */
+.checkbox-label {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Success alert styling */
+.alert-success {
+  background: rgba(212, 237, 218, 0.8);
+  color: #155724;
+  border-color: rgba(195, 230, 203, 0.5);
+}
+
+.alert-success .alert-icon {
+  color: #28a745;
+}
+
+

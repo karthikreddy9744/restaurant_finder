@@ -1,0 +1,114 @@
+.restaurant-detail-container {
+  display: flex;
+  padding: 2rem;
+}
+
+.main-content {
+  flex: 70%;
+  padding-right: 2rem;
+}
+
+.sidebar {
+  flex: 30%;
+}
+
+.restaurant-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.menu-section, .reviews-section {
+  margin-bottom: 2rem;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.menu-item-card, .review-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+/* Cart Controls */
+.cart-controls {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.item-in-cart {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(40, 167, 69, 0.1);
+  border: 1px solid rgba(40, 167, 69, 0.3);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.cart-indicator {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.item-count {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.add-to-cart-btn {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.add-to-cart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.add-to-cart-btn.added {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.add-to-cart-btn.added:hover {
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.review-card p {
+  margin: 0.5rem 0;
+}
+
+.menu-item-image {
+  width: 100%;
+  height: 150px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-image {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: bold;
+  border-radius: 8px;
+}

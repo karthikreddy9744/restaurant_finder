@@ -1,0 +1,179 @@
+
+<div class="home-container particle-bg">
+  <!-- Hero Section with 3D Effects -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text animate-slide-up">
+        <h1 class="gradient-text">Discover Amazing <span class="highlight-text">Restaurants</span></h1>
+        <p class="hero-subtitle">Experience culinary excellence with our curated collection of the finest local restaurants</p>
+      </div>
+
+      <div class="search-container animate-slide-up" style="animation-delay: 0.2s;">
+        <div class="search-card glass">
+          <div class="search-input-group">
+            <div class="search-icon">🔍</div>
+            <input
+              type="text"
+              [(ngModel)]="searchTerm"
+              (input)="onSearchInput($event)"
+              (focus)="onSearchFocus()"
+              (blur)="onSearchBlur()"
+              placeholder="Search restaurants, cuisines, or dishes"
+              class="search-input">
+            <button
+              *ngIf="searchTerm"
+              (click)="clearSearch()"
+              class="clear-btn"
+              title="Clear search">
+              ✕
+            </button>
+            <button (click)="search()" class="search-btn btn btn-primary">Search</button>
+          </div>
+
+          <!-- Search Suggestions Dropdown -->
+          <div *ngIf="showSuggestions" class="search-suggestions">
+            <!-- Recent Searches -->
+            <div *ngIf="recentSearches.length > 0" class="suggestion-section">
+              <div class="suggestion-header">
+                <span class="suggestion-title">Recent Searches</span>
+                <button (click)="clearRecentSearches()" class="clear-recent-btn">Clear</button>
+              </div>
+              <div class="suggestion-list">
+                <div
+                  *ngFor="let search of recentSearches"
+                  (click)="selectRecentSearch(search)"
+                  class="suggestion-item">
+                  <span class="suggestion-icon">🕒</span>
+                  <span class="suggestion-text">{{ search }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Search Suggestions -->
+            <div *ngIf="searchSuggestions.length > 0" class="suggestion-section">
+              <div class="suggestion-header">
+                <span class="suggestion-title">Restaurants</span>
+              </div>
+              <div class="suggestion-list">
+                <div
+                  *ngFor="let restaurant of searchSuggestions"
+                  (click)="selectSuggestion(restaurant)"
+                  class="suggestion-item restaurant-suggestion">
+                  <span class="suggestion-icon">🍽️</span>
+                  <div class="suggestion-content">
+                    <span class="suggestion-text">{{ restaurant.name }}</span>
+                    <span class="suggestion-subtitle">{{ restaurant.cuisine }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Popular Searches -->
+            <div *ngIf="searchSuggestions.length === 0 && recentSearches.length === 0" class="suggestion-section">
+              <div class="suggestion-header">
+                <span class="suggestion-title">Popular Searches</span>
+              </div>
+              <div class="suggestion-list">
+                <div
+                  *ngFor="let search of popularSearches"
+                  (click)="selectPopularSearch(search)"
+                  class="suggestion-item popular-suggestion">
+                  <span class="suggestion-icon">🔥</span>
+                  <span class="suggestion-text">{{ search }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Elements -->
+      <div class="floating-elements">
+        <div class="floating-icon animate-float" style="top: 10%; left: 10%;">🍕</div>
+        <div class="floating-icon animate-float-reverse" style="top: 20%; right: 15%;">🍜</div>
+        <div class="floating-icon animate-float" style="bottom: 30%; left: 20%;">🍔</div>
+        <div class="floating-icon animate-float-reverse" style="bottom: 20%; right: 10%;">🍰</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features-section">
+    <div class="container">
+      <h2 class="section-title gradient-text animate-slide-up">Why Choose Us?</h2>
+      <div class="features-grid">
+        <div class="feature-card card hover-lift animate-slide-left">
+          <div class="feature-icon">⭐</div>
+          <h3>Curated Selection</h3>
+          <p>Hand-picked restaurants with exceptional quality and service</p>
+        </div>
+        <div class="feature-card card hover-lift animate-slide-up" style="animation-delay: 0.1s;">
+          <div class="feature-icon">🚀</div>
+          <h3>Fast Delivery</h3>
+          <p>Quick and reliable delivery to your doorstep</p>
+        </div>
+        <div class="feature-card card hover-lift animate-slide-right" style="animation-delay: 0.2s;">
+          <div class="feature-icon">💳</div>
+          <h3>Secure Payment</h3>
+          <p>Safe and secure payment processing</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Restaurants Section -->
+  <div class="featured-restaurants">
+    <div class="container">
+      <h2 class="section-title gradient-text animate-slide-up">Featured Restaurants</h2>
+      <div class="restaurant-grid">
+        <div class="restaurant-card card hover-lift animate-scale-in">
+          <div class="restaurant-image">
+            <div class="placeholder-icon">🍽️</div>
+            <div class="restaurant-badge">Featured</div>
+          </div>
+          <div class="restaurant-info">
+            <h3>Mario's Italian Bistro</h3>
+            <p class="cuisine-type">Italian Cuisine</p>
+            <div class="restaurant-rating">
+              <span class="stars">⭐⭐⭐⭐⭐</span>
+              <span class="rating-text">4.9 (127 reviews)</span>
+            </div>
+            <button class="btn btn-outline">View Menu</button>
+          </div>
+        </div>
+
+        <div class="restaurant-card card hover-lift animate-scale-in" style="animation-delay: 0.1s;">
+          <div class="restaurant-image">
+            <div class="placeholder-icon">🍜</div>
+            <div class="restaurant-badge">Popular</div>
+          </div>
+          <div class="restaurant-info">
+            <h3>Sakura Sushi</h3>
+            <p class="cuisine-type">Japanese Cuisine</p>
+            <div class="restaurant-rating">
+              <span class="stars">⭐⭐⭐⭐⭐</span>
+              <span class="rating-text">4.8 (89 reviews)</span>
+            </div>
+            <button class="btn btn-outline">View Menu</button>
+          </div>
+        </div>
+
+        <div class="restaurant-card card hover-lift animate-scale-in" style="animation-delay: 0.2s;">
+          <div class="restaurant-image">
+            <div class="placeholder-icon">🍔</div>
+            <div class="restaurant-badge">New</div>
+          </div>
+          <div class="restaurant-info">
+            <h3>Burger Palace</h3>
+            <p class="cuisine-type">American Cuisine</p>
+            <div class="restaurant-rating">
+              <span class="stars">⭐⭐⭐⭐⭐</span>
+              <span class="rating-text">4.7 (156 reviews)</span>
+            </div>
+            <button class="btn btn-outline">View Menu</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

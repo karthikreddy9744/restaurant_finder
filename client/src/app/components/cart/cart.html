@@ -1,0 +1,66 @@
+<div class="cart-container">
+  <h2>🛒 Your Cart</h2>
+  <div *ngIf="(cart$ | async) as cartItems">
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <div class="empty-icon">🛒</div>
+      <p>Your cart is empty.</p>
+      <p class="empty-subtitle">Add some delicious items to get started!</p>
+    </div>
+
+    <div *ngIf="cartItems.length > 0" class="cart-content">
+      <div class="cart-items">
+        <div *ngFor="let item of getUniqueItems(cartItems)" class="cart-item">
+          <div class="item-info">
+            <h4>{{ item.name }}</h4>
+            <p class="item-price">₹{{ item.price }}</p>
+          </div>
+          <div class="item-controls">
+            <span class="quantity">{{ getItemQuantity(cartItems, item) }}</span>
+            <div class="quantity-controls">
+              <button (click)="removeFromCart(item)" class="btn btn-sm btn-outline">-</button>
+              <button (click)="addToCart(item)" class="btn btn-sm btn-primary">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cart-summary">
+        <div class="total">
+          <strong>Total: ₹{{total$ | async}}</strong>
+        </div>
+        <button (click)="placeOrder()" class="place-order-btn" [disabled]="isPlacingOrder">
+          <span class="btn-icon" *ngIf="!isPlacingOrder">🚀</span>
+          <span class="btn-icon" *ngIf="isPlacingOrder">⏳</span>
+          {{ isPlacingOrder ? 'Placing Order...' : 'Place Order' }}
+        </button>
+        <button (click)="clearCart()" class="clear-cart-btn">
+          <span class="btn-icon">🗑️</span>
+          Clear Cart
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Order Confirmation Modal -->
+<div *ngIf="showOrderModal" class="modal-overlay" (click)="closeOrderModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>🎉 Order Placed Successfully!</h3>
+      <button class="close-btn" (click)="closeOrderModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="success-icon">✅</div>
+      <p class="success-message">Your order has been placed and will be prepared shortly!</p>
+      <div class="order-details">
+        <p><strong>Order ID:</strong> {{ orderId }}</p>
+        <p><strong>Total Amount:</strong> ₹{{ orderTotal }}</p>
+        <p><strong>Status:</strong> <span class="status-pending">Pending</span></p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" (click)="viewOrders()">View My Orders</button>
+      <button class="btn btn-outline" (click)="closeOrderModal()">Continue Shopping</button>
+    </div>
+  </div>
+</div>

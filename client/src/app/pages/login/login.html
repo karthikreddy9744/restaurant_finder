@@ -1,0 +1,121 @@
+<div class="auth-container particle-bg">
+  <div class="auth-card animate-slide-up hover-lift">
+    <div class="auth-header">
+      <div class="logo-container">
+        <div class="logo-icon">🍽️</div>
+        <h1 class="gradient-text">Restaurant Finder</h1>
+      </div>
+      <p>Welcome back! Sign in to continue your culinary journey</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="alert alert-error animate-scale-in">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+          <strong>Login Failed</strong>
+          <p>{{ errorMessage }}</p>
+        </div>
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email" class="form-label">
+          <span class="label-icon">📧</span>
+          Email Address
+        </label>
+        <div class="input-container">
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-control glass"
+            [class.error]="getFieldError('email')"
+            placeholder="Enter your email address"
+            autocomplete="email"
+          />
+          <div class="input-icon">✉️</div>
+        </div>
+        <div *ngIf="getFieldError('email')" class="error-message animate-scale-in">
+          {{ getFieldError('email') }}
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password" class="form-label">
+          <span class="label-icon">🔒</span>
+          Password
+        </label>
+        <div class="input-container">
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            class="form-control glass"
+            [class.error]="getFieldError('password')"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+          />
+          <div class="input-icon">🔐</div>
+        </div>
+        <div *ngIf="getFieldError('password')" class="error-message animate-scale-in">
+          {{ getFieldError('password') }}
+        </div>
+      </div>
+
+      <!-- Remember Me & Forgot Password -->
+      <div class="form-options">
+        <label class="checkbox-container">
+          <input type="checkbox" class="checkbox-input">
+          <span class="checkbox-custom"></span>
+          <span class="checkbox-label">Remember me</span>
+        </label>
+        <a href="#" class="forgot-password">Forgot password?</a>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn btn-primary w-full"
+        [disabled]="isLoading"
+      >
+        <span *ngIf="isLoading" class="loading-spinner"></span>
+        <span *ngIf="!isLoading" class="btn-icon">🚀</span>
+        {{ isLoading ? 'Signing In...' : 'Sign In' }}
+      </button>
+
+      <!-- Divider -->
+      <div class="divider">
+        <span class="divider-text">or</span>
+      </div>
+
+      <!-- Social Login Buttons -->
+      <div class="social-login">
+        <button type="button" class="btn btn-social btn-google">
+          <span class="social-icon">🔍</span>
+          Continue with Google
+        </button>
+        <button type="button" class="btn btn-social btn-facebook">
+          <span class="social-icon">📘</span>
+          Continue with Facebook
+        </button>
+      </div>
+    </form>
+
+    <div class="auth-footer">
+      <p>Don't have an account?
+        <a routerLink="/register" class="auth-link">Create one here</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Floating Elements -->
+  <div class="floating-elements">
+    <div class="floating-icon animate-float" style="top: 20%; left: 10%;">🍕</div>
+    <div class="floating-icon animate-float-reverse" style="top: 30%; right: 15%;">🍔</div>
+    <div class="floating-icon animate-float" style="top: 60%; left: 5%;">🍜</div>
+    <div class="floating-icon animate-float-reverse" style="top: 70%; right: 10%;">🍰</div>
+    <div class="floating-icon animate-float" style="top: 40%; right: 5%;">🥗</div>
+  </div>
+</div>

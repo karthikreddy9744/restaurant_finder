@@ -1,0 +1,90 @@
+<div class="restaurant-list-container">
+  <div class="header">
+    <h1>🍽️ Nearby Restaurants</h1>
+    <p>Discover amazing restaurants in your area</p>
+  </div>
+
+  <div class="map-container">
+    <app-map [lat]="lat" [lng]="lng" [zoom]="12"></app-map>
+  </div>
+
+  <div class="filters">
+    <label for="radius">Search Radius: {{ radius / 1000 }} km</label>
+    <input
+      type="range"
+      id="radius"
+      name="radius"
+      min="1000"
+      max="100000"
+      step="1000"
+      [(ngModel)]="radius"
+      (mouseup)="onRadiusChange()"
+      class="radius-slider"
+    >
+    <div class="radius-labels">
+      <span>1km</span>
+      <span>50km</span>
+      <span>100km</span>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Finding restaurants near you...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="error-container">
+    <div class="error-icon">⚠️</div>
+    <p>{{ errorMessage }}</p>
+    <button (click)="loadNearbyRestaurants()" class="btn btn-primary">Try Again</button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && !errorMessage && restaurants.length === 0" class="empty-state">
+    <div class="empty-icon">🍽️</div>
+    <h3>No restaurants found</h3>
+    <p>Try increasing your search radius or check back later for new restaurants.</p>
+    <button (click)="loadAllRestaurants()" class="btn btn-outline">Show All Restaurants</button>
+  </div>
+
+  <!-- Restaurant Grid -->
+  <div *ngIf="!isLoading && restaurants.length > 0" class="restaurant-grid">
+    <div *ngFor="let restaurant of restaurants" class="restaurant-card">
+      <a [routerLink]="['/restaurants', restaurant._id]">
+        <div class="restaurant-image-placeholder">
+          <img
+            *ngIf="restaurant.images && restaurant.images.length > 0"
+            [src]="'http://localhost:3000/' + restaurant.images[0]"
+            [alt]="restaurant.name"
+            class="restaurant-image"
+            (error)="$event.target.style.display='none'"
+          >
+          <div *ngIf="!restaurant.images || restaurant.images.length === 0" class="placeholder-icon">
+            {{ restaurant.name.charAt(0).toUpperCase() }}
+          </div>
+        </div>
+        <div class="restaurant-info">
+          <h2>{{ restaurant.name }}</h2>
+          <p class="cuisine">{{ restaurant.cuisine }}</p>
+          <p class="address">{{ restaurant.address }}</p>
+          <div class="restaurant-stats">
+            <span class="stat" *ngIf="restaurant.menu.length > 0">
+              <span class="stat-icon">📋</span>
+              {{ restaurant.menu.length }} items
+            </span>
+            <span class="stat" *ngIf="restaurant.reviews.length > 0">
+              <span class="stat-icon">⭐</span>
+              {{ getAverageRating(restaurant) }}/5
+            </span>
+            <span class="stat" *ngIf="restaurant.location">
+              <span class="stat-icon">📍</span>
+              {{ getDistanceInKm(restaurant) }}km
+            </span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

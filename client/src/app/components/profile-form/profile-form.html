@@ -1,0 +1,342 @@
+<div class="profile-form-container">
+  <div class="profile-header">
+    <h1>My Profile</h1>
+    <p>Manage your personal information, addresses, and preferences</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading your profile...</p>
+  </div>
+
+  <!-- Profile Form -->
+  <div *ngIf="!isLoading" class="profile-content">
+    <!-- Tab Navigation -->
+    <div class="tab-navigation">
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'profile'"
+        (click)="setActiveTab('profile')">
+        <span class="tab-icon">👤</span>
+        Personal Info
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'addresses'"
+        (click)="setActiveTab('addresses')">
+        <span class="tab-icon">📍</span>
+        Addresses
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'preferences'"
+        (click)="setActiveTab('preferences')">
+        <span class="tab-icon">⚙️</span>
+        Preferences
+      </button>
+    </div>
+
+    <!-- Personal Information Tab -->
+    <div *ngIf="activeTab === 'profile'" class="tab-content">
+      <div class="form-section">
+        <h2>Personal Information</h2>
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              placeholder="Enter your full name"
+              [class.error]="profileForm.get('name')?.invalid && profileForm.get('name')?.touched">
+            <div *ngIf="profileForm.get('name')?.invalid && profileForm.get('name')?.touched" class="error-message">
+              <span *ngIf="profileForm.get('name')?.errors?.['required']">Name is required</span>
+              <span *ngIf="profileForm.get('name')?.errors?.['minlength']">Name must be at least 2 characters</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                placeholder="your.email@example.com"
+                [disabled]="true">
+            <small class="help-text">Email cannot be changed</small>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number *</label>
+            <input
+              type="tel"
+              id="phone"
+              formControlName="phone"
+              placeholder="9876543210"
+              [class.error]="profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched">
+            <div *ngIf="profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched" class="error-message">
+              <span *ngIf="profileForm.get('phone')?.errors?.['required']">Phone number is required</span>
+              <span *ngIf="profileForm.get('phone')?.errors?.['pattern']">Please enter a valid 10-digit phone number</span>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="profileForm.invalid || isSaving">
+              <span *ngIf="isSaving">Saving...</span>
+              <span *ngIf="!isSaving">Save Changes</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Addresses Tab -->
+    <div *ngIf="activeTab === 'addresses'" class="tab-content">
+      <div class="addresses-section">
+        <div class="section-header">
+          <h2>Saved Addresses</h2>
+          <button class="btn btn-primary" (click)="showAddAddressForm()">
+            <span class="btn-icon">➕</span>
+            Add New Address
+          </button>
+        </div>
+
+        <!-- Address List -->
+        <div *ngIf="hasAddresses" class="address-list">
+          <div *ngFor="let address of userAddresses" class="address-card">
+            <div class="address-header">
+              <div class="address-type">
+                <span class="type-icon">{{ getAddressTypeIcon(address.type) }}</span>
+                <span class="type-label">{{ getAddressTypeLabel(address.type) }}</span>
+                <span *ngIf="address.isDefault" class="default-badge">Default</span>
+              </div>
+              <div class="address-actions">
+                <button class="btn-icon-btn" (click)="editAddress(address)" title="Edit">
+                  ✏️
+                </button>
+                <button class="btn-icon-btn delete" (click)="deleteAddress(address)" title="Delete">
+                  🗑️
+                </button>
+              </div>
+            </div>
+            <div class="address-details">
+              <p class="address-text">
+                {{ address.street }}, {{ address.area }}<br>
+                {{ address.city }}, {{ address.state }} - {{ address.pincode }}
+                <span *ngIf="address.landmark">, {{ address.landmark }}</span>
+              </p>
+            </div>
+            <div class="address-footer">
+              <button
+                *ngIf="!address.isDefault"
+                class="btn btn-outline btn-sm"
+                (click)="setDefaultAddress(address)">
+                Set as Default
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!hasAddresses" class="empty-state">
+          <div class="empty-icon">📍</div>
+          <h3>No addresses saved</h3>
+          <p>Add your first address to get started with faster checkout</p>
+          <button class="btn btn-primary" (click)="showAddAddressForm()">
+            <span class="btn-icon">➕</span>
+            Add Address
+          </button>
+        </div>
+      </div>
+
+      <!-- Address Form Modal -->
+      <div *ngIf="showAddressForm" class="modal-overlay" (click)="cancelAddressForm()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h3>{{ editingAddress ? 'Edit Address' : 'Add New Address' }}</h3>
+            <button class="close-btn" (click)="cancelAddressForm()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="addressForm" (ngSubmit)="saveAddress()">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="street">Street Address *</label>
+                  <input
+                    type="text"
+                    id="street"
+                    formControlName="street"
+                    placeholder="House number, street name"
+                    [class.error]="addressForm.get('street')?.invalid && addressForm.get('street')?.touched">
+                </div>
+                <div class="form-group">
+                  <label for="area">Area/Locality *</label>
+                  <input
+                    type="text"
+                    id="area"
+                    formControlName="area"
+                    placeholder="Area or locality name"
+                    [class.error]="addressForm.get('area')?.invalid && addressForm.get('area')?.touched">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="city">City *</label>
+                  <input
+                    type="text"
+                    id="city"
+                    formControlName="city"
+                    placeholder="City name"
+                    [class.error]="addressForm.get('city')?.invalid && addressForm.get('city')?.touched">
+                </div>
+                <div class="form-group">
+                  <label for="state">State *</label>
+                  <select
+                    id="state"
+                    formControlName="state"
+                    [class.error]="addressForm.get('state')?.invalid && addressForm.get('state')?.touched">
+                    <option value="">Select State</option>
+                    <option *ngFor="let state of states" [value]="state">{{ state }}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="pincode">Pincode *</label>
+                  <input
+                    type="text"
+                    id="pincode"
+                    formControlName="pincode"
+                    placeholder="6-digit pincode"
+                    maxlength="6"
+                    [class.error]="addressForm.get('pincode')?.invalid && addressForm.get('pincode')?.touched">
+                </div>
+                <div class="form-group">
+                  <label for="type">Address Type *</label>
+                  <select
+                    id="type"
+                    formControlName="type"
+                    [class.error]="addressForm.get('type')?.invalid && addressForm.get('type')?.touched">
+                    <option *ngFor="let type of addressTypes" [value]="type.value">
+                      {{ type.icon }} {{ type.label }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="landmark">Landmark (Optional)</label>
+                <input
+                  type="text"
+                  id="landmark"
+                  formControlName="landmark"
+                  placeholder="Nearby landmark or building">
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-outline" (click)="cancelAddressForm()">
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  [disabled]="addressForm.invalid || isSaving">
+                  <span *ngIf="isSaving">Saving...</span>
+                  <span *ngIf="!isSaving">{{ editingAddress ? 'Update Address' : 'Add Address' }}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preferences Tab -->
+    <div *ngIf="activeTab === 'preferences'" class="tab-content">
+      <div class="preferences-section">
+        <h2>Food Preferences</h2>
+        <form [formGroup]="preferencesForm" (ngSubmit)="savePreferences()">
+          <!-- Cuisine Preferences -->
+          <div class="form-group">
+            <label>Favorite Cuisines</label>
+            <div class="preference-list">
+              <div *ngFor="let control of cuisineArray.controls; let i = index" class="preference-item">
+                <select [formControl]="$any(control)" class="preference-select">
+                  <option value="">Select Cuisine</option>
+                  <option *ngFor="let cuisine of cuisineOptions" [value]="cuisine">{{ cuisine }}</option>
+                </select>
+                <button type="button" class="remove-btn" (click)="removeCuisinePreference(i)">×</button>
+              </div>
+              <button type="button" class="add-preference-btn" (click)="addCuisinePreference()">
+                <span class="btn-icon">➕</span>
+                Add Cuisine
+              </button>
+            </div>
+          </div>
+
+          <!-- Dietary Restrictions -->
+          <div class="form-group">
+            <label>Dietary Restrictions</label>
+            <div class="preference-list">
+              <div *ngFor="let control of dietaryArray.controls; let i = index" class="preference-item">
+                <select [formControl]="$any(control)" class="preference-select">
+                  <option value="">Select Restriction</option>
+                  <option *ngFor="let restriction of dietaryOptions" [value]="restriction">{{ restriction }}</option>
+                </select>
+                <button type="button" class="remove-btn" (click)="removeDietaryRestriction(i)">×</button>
+              </div>
+              <button type="button" class="add-preference-btn" (click)="addDietaryRestriction()">
+                <span class="btn-icon">➕</span>
+                Add Restriction
+              </button>
+            </div>
+          </div>
+
+          <!-- Delivery Instructions -->
+          <div class="form-group">
+            <label for="deliveryInstructions">Delivery Instructions</label>
+            <textarea
+              id="deliveryInstructions"
+              formControlName="deliveryInstructions"
+              placeholder="Any special instructions for delivery (e.g., call before delivery, leave at gate, etc.)"
+              rows="3"></textarea>
+          </div>
+
+          <!-- Notification Settings -->
+          <div class="form-group">
+            <label>Notification Preferences</label>
+            <div class="notification-settings">
+              <div class="setting-item">
+                <input type="checkbox" id="email" formControlName="email">
+                <label for="email">Email Notifications</label>
+              </div>
+              <div class="setting-item">
+                <input type="checkbox" id="sms" formControlName="sms">
+                <label for="sms">SMS Notifications</label>
+              </div>
+              <div class="setting-item">
+                <input type="checkbox" id="push" formControlName="push">
+                <label for="push">Push Notifications</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="isSaving">
+              <span *ngIf="isSaving">Saving...</span>
+              <span *ngIf="!isSaving">Save Preferences</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

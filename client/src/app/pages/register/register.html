@@ -1,0 +1,176 @@
+<div class="auth-container particle-bg">
+  <div class="auth-card animate-slide-up hover-lift">
+    <div class="auth-header">
+      <div class="logo-container">
+        <div class="logo-icon">🍽️</div>
+        <h1 class="gradient-text">Join Restaurant Finder</h1>
+      </div>
+      <p>Create your account and start discovering amazing restaurants</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="alert alert-error animate-scale-in">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+          <strong>Registration Failed</strong>
+          <p>{{ errorMessage }}</p>
+        </div>
+      </div>
+
+      <!-- Success Message -->
+      <div *ngIf="successMessage" class="alert alert-success animate-scale-in">
+        <div class="alert-icon">✅</div>
+        <div class="alert-content">
+          <strong>Registration Successful!</strong>
+          <p>{{ successMessage }}</p>
+        </div>
+      </div>
+
+      <!-- Full Name Field -->
+      <div class="form-group">
+        <label for="name" class="form-label">
+          <span class="label-icon">👤</span>
+          Full Name
+        </label>
+        <div class="input-container">
+          <input
+            type="text"
+            id="name"
+            formControlName="name"
+            class="form-control glass"
+            [class.error]="getFieldError('name')"
+            placeholder="Enter your full name"
+            autocomplete="name"
+          />
+          <div class="input-icon">👨‍💼</div>
+        </div>
+        <div *ngIf="getFieldError('name')" class="error-message animate-scale-in">
+          {{ getFieldError('name') }}
+        </div>
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email" class="form-label">
+          <span class="label-icon">📧</span>
+          Email Address
+        </label>
+        <div class="input-container">
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-control glass"
+            [class.error]="getFieldError('email')"
+            placeholder="Enter your email address"
+            autocomplete="email"
+          />
+          <div class="input-icon">✉️</div>
+        </div>
+        <div *ngIf="getFieldError('email')" class="error-message animate-scale-in">
+          {{ getFieldError('email') }}
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password" class="form-label">
+          <span class="label-icon">🔒</span>
+          Password
+        </label>
+        <div class="input-container">
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            class="form-control glass"
+            [class.error]="getFieldError('password')"
+            placeholder="Create a strong password"
+            autocomplete="new-password"
+          />
+          <div class="input-icon">🔐</div>
+        </div>
+        <div *ngIf="getFieldError('password')" class="error-message animate-scale-in">
+          {{ getFieldError('password') }}
+        </div>
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div class="form-group">
+        <label for="confirmPassword" class="form-label">
+          <span class="label-icon">🔑</span>
+          Confirm Password
+        </label>
+        <div class="input-container">
+          <input
+            type="password"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            class="form-control glass"
+            [class.error]="getFormError()"
+            placeholder="Confirm your password"
+            autocomplete="new-password"
+          />
+          <div class="input-icon">🔒</div>
+        </div>
+        <div *ngIf="getFormError()" class="error-message animate-scale-in">
+          {{ getFormError() }}
+        </div>
+      </div>
+
+      <!-- Terms and Conditions -->
+      <div class="form-options">
+        <label class="checkbox-container">
+          <input type="checkbox" class="checkbox-input" required>
+          <span class="checkbox-custom"></span>
+          <span class="checkbox-label">I agree to the <a href="#" class="terms-link">Terms & Conditions</a></span>
+        </label>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn btn-primary w-full"
+        [disabled]="isLoading"
+      >
+        <span *ngIf="isLoading" class="loading-spinner"></span>
+        <span *ngIf="!isLoading" class="btn-icon">🚀</span>
+        {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+      </button>
+
+      <!-- Divider -->
+      <div class="divider">
+        <span class="divider-text">or</span>
+      </div>
+
+      <!-- Social Registration Buttons -->
+      <div class="social-login">
+        <button type="button" class="btn btn-social btn-google">
+          <span class="social-icon">🔍</span>
+          Sign up with Google
+        </button>
+        <button type="button" class="btn btn-social btn-facebook">
+          <span class="social-icon">📘</span>
+          Sign up with Facebook
+        </button>
+      </div>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account?
+        <a routerLink="/login" class="auth-link">Sign in here</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Floating Elements -->
+  <div class="floating-elements">
+    <div class="floating-icon animate-float" style="top: 15%; left: 8%;">🍕</div>
+    <div class="floating-icon animate-float-reverse" style="top: 25%; right: 12%;">🍔</div>
+    <div class="floating-icon animate-float" style="top: 55%; left: 3%;">🍜</div>
+    <div class="floating-icon animate-float-reverse" style="top: 65%; right: 8%;">🍰</div>
+    <div class="floating-icon animate-float" style="top: 35%; right: 3%;">🥗</div>
+    <div class="floating-icon animate-float-reverse" style="top: 75%; left: 10%;">🍣</div>
+  </div>
+</div>

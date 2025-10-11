@@ -1,0 +1,65 @@
+<div *ngIf="isLoading" class="loading-indicator">
+  <p>Loading restaurant details...</p>
+</div>
+
+<div *ngIf="error" class="error-indicator">
+  <p>{{ error }}</p>
+</div>
+
+<div *ngIf="!isLoading && !error && restaurant" class="restaurant-detail-container">
+  <div class="main-content">
+    <div class="restaurant-header">
+      <h1>{{ restaurant.name }}</h1>
+      <p>{{ restaurant.cuisine }}</p>
+      <p>{{ restaurant.address }}</p>
+    </div>
+
+    <div class="image-gallery">
+      <img *ngFor="let image of restaurant.images" [src]="'http://localhost:3000/' + image" alt="{{ restaurant.name }}" class="restaurant-image">
+    </div>
+
+    <div class="map-container">
+      <app-map *ngIf="restaurant.location" [lat]="restaurant.location.coordinates[1]" [lng]="restaurant.location.coordinates[0]" [zoom]="15"></app-map>
+    </div>
+
+    <div class="menu-section">
+      <h2>Menu</h2>
+      <div class="menu-grid">
+        <div *ngFor="let item of restaurant.menu" class="menu-item-card">
+          <div class="menu-item-image">
+            <div class="placeholder-image">{{ item.name.charAt(0).toUpperCase() }}</div>
+          </div>
+          <h3>{{ item.name }}</h3>
+          <p>{{ item.description }}</p>
+          <p class="price">₹{{ item.price }}</p>
+
+          <div class="cart-controls">
+            <div *ngIf="(isInCart(item) | async)" class="item-in-cart">
+              <span class="cart-indicator">✓ In Cart</span>
+              <span class="item-count">({{ getItemCountInCart(item) | async }})</span>
+            </div>
+            <button
+              (click)="addToCart(item)"
+              class="btn btn-primary add-to-cart-btn"
+              [class.added]="(isInCart(item) | async)"
+            >
+              <span *ngIf="!(isInCart(item) | async)">Add to Cart</span>
+              <span *ngIf="(isInCart(item) | async)">Add More</span>
+            </button>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div class="reviews-section">
+        <h2>Reviews</h2>
+        <div *ngFor="let review of restaurant.reviews" class="review-card">
+          <p><strong>Rating:</strong> {{ review.rating }}/5</p>
+          <p>{{ review.comment }}</p>
+        </div>
+      </div>
+  </div>
+  <div class="sidebar">
+    <app-cart></app-cart>
+  </div>
+</div>

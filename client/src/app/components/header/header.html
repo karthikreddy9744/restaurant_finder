@@ -1,0 +1,60 @@
+<header class="main-header">
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a routerLink="/" class="logo">
+        <span class="logo-icon">🍽️</span>
+        Restaurant Finder
+      </a>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a routerLink="/" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/restaurants" class="nav-link">Restaurants</a>
+      </li>
+
+      <!-- Admin-only links -->
+      <li *ngIf="(isLoggedIn$ | async) && isAdmin" class="nav-item">
+        <a routerLink="/restaurants/new" class="nav-link">Add Restaurant</a>
+      </li>
+
+      <!-- User dropdown when logged in -->
+      <li *ngIf="isLoggedIn$ | async" class="nav-item dropdown">
+        <div class="dropdown-toggle" (click)="toggleDropdown($event)">
+          <span class="user-avatar">{{ (userInfo$ | async)?.name?.charAt(0) || 'U' }}</span>
+          <span class="user-name">{{ (userInfo$ | async)?.name || 'User' }}</span>
+          <span class="dropdown-arrow">▼</span>
+        </div>
+        <div class="dropdown-menu" [class.show]="isDropdownOpen">
+          <a routerLink="/profile" class="dropdown-item">
+            <span class="dropdown-icon">👤</span>
+            Profile
+          </a>
+          <a routerLink="/orders" class="dropdown-item" *ngIf="!isAdmin">
+            <span class="dropdown-icon">📋</span>
+            My Orders
+          </a>
+          <a routerLink="/admin" class="dropdown-item" *ngIf="isAdmin">
+            <span class="dropdown-icon">⚙️</span>
+            Admin Panel
+          </a>
+          <div class="dropdown-divider"></div>
+          <a (click)="logout()" class="dropdown-item logout">
+            <span class="dropdown-icon">🚪</span>
+            Logout
+          </a>
+        </div>
+      </li>
+
+      <!-- Login/Register when not logged in -->
+      <li *ngIf="!(isLoggedIn$ | async)" class="nav-item">
+        <a routerLink="/login" class="nav-link btn-outline">Login</a>
+      </li>
+      <li *ngIf="!(isLoggedIn$ | async)" class="nav-item">
+        <a routerLink="/register" class="nav-link btn-primary">Sign Up</a>
+      </li>
+    </ul>
+  </nav>
+</header>

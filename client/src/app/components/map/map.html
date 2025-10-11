@@ -1,0 +1,48 @@
+<div class="map-container">
+  <div class="map-header" *ngIf="showHeader">
+    <h3 class="map-title">
+      <span class="map-icon">🗺️</span>
+      {{ mapTitle || 'Restaurant Locations' }}
+    </h3>
+    <div class="map-controls">
+      <div class="search-bar">
+        <input type="text" placeholder="Search for a location..." #searchInput>
+        <button (click)="searchLocation(searchInput.value)">Search</button>
+      </div>
+      <button class="btn btn-sm btn-outline" (click)="getUserLocation()" title="My Location">
+        <span class="btn-icon">📍</span>
+        My Location
+      </button>
+    </div>
+  </div>
+
+  <div class="map-wrapper">
+    <div [id]="mapId" class="leaflet-map"></div>
+
+    <!-- Map Loading Overlay -->
+    <div class="map-loading" *ngIf="isLoading">
+      <div class="loading-spinner"></div>
+      <p>Loading map...</p>
+    </div>
+
+    <!-- Map Error Overlay -->
+    <div class="map-error" *ngIf="hasError">
+      <div class="error-icon">⚠️</div>
+      <p>{{ errorMessage || 'Failed to load map' }}</p>
+      <button class="btn btn-sm btn-primary" (click)="retryMap()">Retry</button>
+    </div>
+  </div>
+
+  <!-- Map Info Panel -->
+  <div class="map-info" *ngIf="showInfo && selectedLocation">
+    <div class="info-header">
+      <h4>📍 Location Details</h4>
+      <button class="btn btn-sm btn-outline" (click)="closeInfo()">✕</button>
+    </div>
+    <div class="info-content">
+      <p><strong>Latitude:</strong> {{ selectedLocation.lat | number:'1.6-6' }}</p>
+      <p><strong>Longitude:</strong> {{ selectedLocation.lng | number:'1.6-6' }}</p>
+      <p *ngIf="selectedLocation.address"><strong>Address:</strong> {{ selectedLocation.address }}</p>
+    </div>
+  </div>
+</div>

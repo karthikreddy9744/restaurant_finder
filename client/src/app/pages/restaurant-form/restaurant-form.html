@@ -1,0 +1,250 @@
+<div class="form-container">
+  <div class="form-header">
+    <h1>{{ isEditMode ? 'Edit Restaurant' : 'Add New Restaurant' }}</h1>
+    <p>{{ isEditMode ? 'Update restaurant information and menu' : 'Create a new restaurant with menu items' }}</p>
+  </div>
+
+  <form [formGroup]="restaurantForm" (ngSubmit)="onSubmit()" class="restaurant-form">
+    <!-- Success/Error Messages -->
+    <div *ngIf="errorMessage" class="alert alert-error">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading && isEditMode" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading restaurant...</p>
+    </div>
+
+    <div *ngIf="!isLoading || !isEditMode" class="form-content">
+      <!-- Restaurant Basic Information -->
+      <div class="form-section">
+        <h2>Restaurant Information</h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name" class="form-label">Restaurant Name</label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              class="form-control"
+              [class.error]="getFieldError('name')"
+              placeholder="Enter restaurant name"
+            />
+            <div *ngIf="getFieldError('name')" class="error-message">
+              {{ getFieldError('name') }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cuisine" class="form-label">Cuisine Type</label>
+            <select
+              id="cuisine"
+              formControlName="cuisine"
+              class="form-control"
+              [class.error]="getFieldError('cuisine')"
+            >
+              <option value="">Select cuisine type</option>
+              <option value="Italian">Italian</option>
+              <option value="Chinese">Chinese</option>
+              <option value="Indian">Indian</option>
+              <option value="Mexican">Mexican</option>
+              <option value="American">American</option>
+              <option value="Japanese">Japanese</option>
+              <option value="Thai">Thai</option>
+              <option value="French">French</option>
+              <option value="Mediterranean">Mediterranean</option>
+              <option value="Fast Food">Fast Food</option>
+              <option value="Other">Other</option>
+            </select>
+            <div *ngIf="getFieldError('cuisine')" class="error-message">
+              {{ getFieldError('cuisine') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address" class="form-label">Address</label>
+          <textarea
+            id="address"
+            formControlName="address"
+            class="form-control"
+            [class.error]="getFieldError('address')"
+            placeholder="Enter restaurant address"
+            rows="3"
+          ></textarea>
+          <div *ngIf="getFieldError('address')" class="error-message">
+            {{ getFieldError('address') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="images" class="form-label">Images</label>
+          <input type="file" id="images" (change)="onFileSelected($event)" multiple class="form-control">
+        </div>
+      </div>
+
+      <!-- Map Section -->
+      <div class="form-section">
+        <h2>Location</h2>
+        <div class="map-instructions">
+          <p class="instruction-text">
+            <span class="instruction-icon">📍</span>
+            Click on the map to place your restaurant location or drag the green marker to adjust the position.
+          </p>
+        </div>
+        <div class="search-bar">
+          <input
+            type="text"
+            #locationSearch
+            placeholder="Search for a location (e.g., 'Times Square, New York')"
+            (keyup.enter)="searchLocation(locationSearch.value)"
+            class="form-control"
+          >
+          <button
+            type="button"
+            (click)="searchLocation(locationSearch.value)"
+            class="btn btn-primary"
+            [disabled]="!locationSearch.value || !locationSearch.value.trim()"
+          >
+            Search
+          </button>
+          <button
+            type="button"
+            (click)="locationSearch.value = ''; mapComponent.getUserLocation()"
+            class="btn btn-outline"
+            title="Use my current location"
+          >
+            📍 My Location
+          </button>
+        </div>
+        <app-map [markerDraggable]="true" (locationChanged)="onLocationChanged($event)" [showUserLocationOnInit]="true"></app-map>
+      </div>
+
+      <!-- Menu Items Section -->
+      <div class="form-section">
+        <div class="section-header">
+          <h2>Menu Items</h2>
+          <button type="button" (click)="addMenuItem()" class="btn btn-outline btn-sm">
+            <span class="btn-icon">➕</span>
+            Add Menu Item
+          </button>
+        </div>
+
+        <div formArrayName="menu" class="menu-items">
+          <div
+            *ngFor="let menuItem of menuItems.controls; let i = index"
+            [formGroupName]="i"
+            class="menu-item-card"
+          >
+            <div class="menu-item-header">
+              <h3>Menu Item {{ i + 1 }}</h3>
+              <button
+                type="button"
+                (click)="removeMenuItem(i)"
+                class="btn btn-danger btn-sm"
+                [disabled]="menuItems.length === 1"
+              >
+                <span class="btn-icon">🗑️</span>
+                Remove
+              </button>
+            </div>
+
+            <div class="menu-item-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label [for]="'itemName' + i" class="form-label">Item Name</label>
+                  <input
+                    type="text"
+                    [id]="'itemName' + i"
+                    formControlName="name"
+                    class="form-control"
+                    [class.error]="getMenuItemError(i, 'name')"
+                    placeholder="Enter item name"
+                  />
+                  <div *ngIf="getMenuItemError(i, 'name')" class="error-message">
+                    {{ getMenuItemError(i, 'name') }}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label [for]="'itemCategory' + i" class="form-label">Category</label>
+                  <select
+                    [id]="'itemCategory' + i"
+                    formControlName="category"
+                    class="form-control"
+                    [class.error]="getMenuItemError(i, 'category')"
+                  >
+                    <option value="">Select category</option>
+                    <option value="Appetizers">Appetizers</option>
+                    <option value="Main Course">Main Course</option>
+                    <option value="Desserts">Desserts</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Salads">Salads</option>
+                    <option value="Soups">Soups</option>
+                    <option value="Sides">Sides</option>
+                  </select>
+                  <div *ngIf="getMenuItemError(i, 'category')" class="error-message">
+                    {{ getMenuItemError(i, 'category') }}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label [for]="'itemPrice' + i" class="form-label">Price (₹)</label>
+                  <input
+                    type="number"
+                    [id]="'itemPrice' + i"
+                    formControlName="price"
+                    class="form-control"
+                    [class.error]="getMenuItemError(i, 'price')"
+                    placeholder="0.00"
+                    step="0.01"
+                    min="0"
+                  />
+                  <div *ngIf="getMenuItemError(i, 'price')" class="error-message">
+                    {{ getMenuItemError(i, 'price') }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label [for]="'itemDescription' + i" class="form-label">Description</label>
+                <textarea
+                  [id]="'itemDescription' + i"
+                  formControlName="description"
+                  class="form-control"
+                  [class.error]="getMenuItemError(i, 'description')"
+                  placeholder="Enter item description"
+                  rows="2"
+                ></textarea>
+                <div *ngIf="getMenuItemError(i, 'description')" class="error-message">
+                  {{ getMenuItemError(i, 'description') }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" (click)="onCancel()" class="btn btn-secondary">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isLoading"
+        >
+          <span *ngIf="isLoading" class="loading-spinner"></span>
+          {{ isLoading ? 'Saving...' : (isEditMode ? 'Update Restaurant' : 'Create Restaurant') }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,102 @@
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>Admin Dashboard</h1>
+    <p>Manage your restaurants and view analytics</p>
+    <a routerLink="/restaurants/new" class="btn btn-primary">
+      <span class="btn-icon">➕</span>
+      Add New Restaurant
+    </a>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">🏪</div>
+      <div class="stat-content">
+        <h3>{{ getTotalRestaurants() }}</h3>
+        <p>Total Restaurants</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-content">
+        <h3>{{ getTotalReviews() }}</h3>
+        <p>Total Reviews</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-content">
+        <h3>{{ getAverageRating() }}</h3>
+        <p>Average Rating</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Restaurants Management -->
+  <div class="restaurants-section">
+    <div class="section-header">
+      <h2>Restaurant Management</h2>
+      <div *ngIf="errorMessage" class="alert alert-error">
+        {{ errorMessage }}
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading restaurants...</p>
+    </div>
+
+    <div *ngIf="!isLoading && restaurants.length === 0" class="empty-state">
+      <div class="empty-icon">🍽️</div>
+      <h3>No restaurants yet</h3>
+      <p>Get started by adding your first restaurant</p>
+      <a routerLink="/restaurants/new" class="btn btn-primary">Add Restaurant</a>
+    </div>
+
+    <div *ngIf="!isLoading && restaurants.length > 0" class="restaurants-grid">
+      <div *ngFor="let restaurant of restaurants" class="restaurant-card">
+        <div class="restaurant-header">
+          <h3>{{ restaurant.name }}</h3>
+          <div class="restaurant-meta">
+            <span class="cuisine">{{ restaurant.cuisine }}</span>
+            <span class="rating" *ngIf="restaurant.reviews.length > 0">
+              ⭐ {{ getRestaurantRating(restaurant) }}
+            </span>
+          </div>
+        </div>
+
+        <div class="restaurant-body">
+          <p class="address">{{ restaurant.address }}</p>
+          <div class="restaurant-stats">
+            <span class="stat">
+              <span class="stat-icon">📋</span>
+              {{ restaurant.menu.length }} items
+            </span>
+            <span class="stat">
+              <span class="stat-icon">💬</span>
+              {{ restaurant.reviews.length }} reviews
+            </span>
+          </div>
+        </div>
+
+        <div class="restaurant-actions">
+          <a [routerLink]="['/restaurants', restaurant._id]" class="btn btn-outline btn-sm">
+            <span class="btn-icon">👁️</span>
+            View
+          </a>
+          <a [routerLink]="['/restaurants', restaurant._id, 'edit']" class="btn btn-secondary btn-sm">
+            <span class="btn-icon">✏️</span>
+            Edit
+          </a>
+          <button (click)="deleteRestaurant(restaurant._id!)" class="btn btn-danger btn-sm">
+            <span class="btn-icon">🗑️</span>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
