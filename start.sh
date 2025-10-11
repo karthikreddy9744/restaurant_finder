@@ -2,13 +2,6 @@
 
 echo "Starting Restaurant Finder MEAN App..."
 
-# Check if MongoDB is running
-if ! pgrep -x "mongod" > /dev/null; then
-    echo "MongoDB is not running. Please start MongoDB first."
-    echo "You can start MongoDB with: brew services start mongodb-community"
-    exit 1
-fi
-
 # Start the backend server
 echo "Starting backend server..."
 cd server
