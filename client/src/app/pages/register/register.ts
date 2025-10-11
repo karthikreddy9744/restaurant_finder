@@ -30,7 +30,6 @@ export class RegisterComponent implements OnInit {
       {
         name: ['', [Validators.required, Validators.minLength(2)]],
         email: ['', [Validators.required, Validators.email]],
-        phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
         password: ['', [Validators.required, Validators.minLength(8)]],
         confirmPassword: ['', [Validators.required]],
         terms: [false, [Validators.requiredTrue]],
@@ -59,7 +58,6 @@ export class RegisterComponent implements OnInit {
         name: this.registerForm.value.name,
         email: this.registerForm.value.email,
         password: this.registerForm.value.password,
-        phone: this.registerForm.value.phone,
         role: 'user',
       };
 
@@ -95,7 +93,6 @@ export class RegisterComponent implements OnInit {
       if (field.errors['email']) return 'Please enter a valid email';
       if (field.errors['minlength'])
         return `Password must be at least ${field.errors['minlength'].requiredLength} characters`;
-      if (field.errors['pattern']) return 'Please enter a valid 10-digit phone number';
       if (field.errors['requiredTrue']) return 'You must agree to the terms and conditions';
     }
     return '';
