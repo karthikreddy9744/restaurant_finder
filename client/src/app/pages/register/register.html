@@ -77,28 +77,7 @@
         </div>
       </div>
 
-      <!-- Phone Number Field -->
-      <div class="form-group">
-        <label for="phone" class="form-label">
-          <span class="label-icon">📞</span>
-          Phone Number
-        </label>
-        <div class="input-container">
-          <input
-            type="tel"
-            id="phone"
-            formControlName="phone"
-            class="form-control glass"
-            [class.error]="getFieldError('phone')"
-            placeholder="Enter your phone number"
-            autocomplete="tel"
-          />
-          <div class="input-icon">📱</div>
-        </div>
-        <div *ngIf="getFieldError('phone')" class="error-message animate-scale-in">
-          {{ getFieldError('phone') }}
-        </div>
-      </div>
+
 
       <!-- Password Field -->
       <div class="form-group">
