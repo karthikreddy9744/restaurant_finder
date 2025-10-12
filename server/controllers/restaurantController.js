@@ -77,15 +77,7 @@ exports.createRestaurant = async (req, res) => {
 
 // Update a restaurant
 exports.updateRestaurant = async (req, res) => {
-  const { name, address, cuisine, location, images } = req.body;
-
-  // Build restaurant object
-  const restaurantFields = {};
-  if (name) restaurantFields.name = name;
-  if (address) restaurantFields.address = address;
-  if (cuisine) restaurantFields.cuisine = cuisine;
-  if (location) restaurantFields.location = location;
-  if (images) restaurantFields.images = images;
+  const { name, address, cuisine, location, images, menu } = req.body;
 
   try {
     let restaurant = await Restaurant.findById(req.params.id);
@@ -93,16 +85,19 @@ exports.updateRestaurant = async (req, res) => {
     if (!restaurant) return res.status(404).json({ msg: 'Restaurant not found' });
 
     // Check user
-    if(restaurant.owner.toString() !== req.user.id) {
+    if (req.user.role !== 'admin' && (!restaurant.owner || restaurant.owner.toString() !== req.user.id)) {
       return res.status(401).json({ msg: 'User not authorized' });
     }
 
-    restaurant = await Restaurant.findByIdAndUpdate(
-      req.params.id,
-      { $set: restaurantFields },
-      { new: true }
-    );
+    // Overwrite restaurant fields with new data
+    restaurant.name = name;
+    restaurant.address = address;
+    restaurant.cuisine = cuisine;
+    restaurant.location = location;
+    restaurant.images = images;
+    restaurant.menu = menu;
 
+    await restaurant.save();
     res.json(restaurant);
   } catch (err) {
     console.error(err.message);
@@ -120,7 +115,7 @@ exports.deleteRestaurant = async (req, res) => {
     }
 
     // Check user
-    if(restaurant.owner.toString() !== req.user.id) {
+    if (req.user.role !== 'admin' && (!restaurant.owner || restaurant.owner.toString() !== req.user.id)) {
       return res.status(401).json({ msg: 'User not authorized' });
     }
 

@@ -2,7 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
+const userController = require('../controllers/userController');
 const { check } = require('express-validator');
+const auth = require('../middleware/auth');
 
 // @route   POST api/auth/register
 // @desc    Register user
@@ -31,5 +33,10 @@ router.post(
   ],
   authController.login
 );
+
+// @route   GET api/auth/me
+// @desc    Get logged in user
+// @access  Private
+router.get('/me', auth, userController.getMe);
 
 module.exports = router;

@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth';
+import { Observable } from 'rxjs';
+import { User } from '../../models/User';
 
 @Component({
   selector: 'app-footer',
@@ -9,7 +12,12 @@ import { RouterLink } from '@angular/router';
   templateUrl: './footer.html',
   styleUrl: './footer.css'
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit {
+  isLoggedIn$!: Observable<boolean>;
+  isAdmin: boolean = false;
+
+  constructor(private authService: AuthService) {}
+
   currentYear = new Date().getFullYear();
 
   socialLinks = [
@@ -37,4 +45,13 @@ export class FooterComponent {
     { name: 'Order Support', route: '/support' },
     { name: 'Feedback', route: '/feedback' }
   ];
+
+  ngOnInit(): void {
+    this.isLoggedIn$ = this.authService.isLoggedIn$;
+    this.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this.authService.getProfile().subscribe((user: User) => this.isAdmin = user.role === 'admin');
+      }
+    });
+  }
 }
