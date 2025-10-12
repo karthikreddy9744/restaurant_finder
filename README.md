@@ -663,9 +663,9 @@ npm install --production
 
 ```bash
 # Production environment variables
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/restaurant-finder
+MONGODB_URI=Mongodb_connection_string
 JWT_SECRET=your_production_jwt_secret
-NODE_ENV=production
+NODE_ENV=production_environment
 PORT=3000
 ```
 
