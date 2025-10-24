@@ -16,7 +16,7 @@ sleep 3
 echo "Starting frontend..."
 cd ../client
 npm install
-npm start &
+npm start & npm build
 FRONTEND_PID=$!
 
 echo "Both servers are starting..."

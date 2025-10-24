@@ -1,0 +1,4 @@
+- [x] Update restaurant.ts to use environment.backendUrl
+- [x] Update auth.ts to use environment.backendUrl
+- [x] Update user.service.ts to use environment.backendUrl
+- [x] Update order.ts to use environment.backendUrl
